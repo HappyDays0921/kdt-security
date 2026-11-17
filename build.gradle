@@ -1,0 +1,51 @@
+// 컴파일·실행·패키징에 적용할 빌드 기능을 선언합니다.
+plugins {
+	// Java 컴파일과 테스트 작업을 사용합니다.
+	id 'java'
+	// 이 교안의 Boot 버전으로 앱 실행·패키징을 준비합니다.
+	id 'org.springframework.boot' version '4.1.2'
+	// Boot와 호환되는 라이브러리 버전을 관리합니다.
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+group = 'com.kdt'
+version = '0.0.1-SNAPSHOT'
+// 컴파일·실행의 JDK 기준을 21로 정합니다.
+java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
+// 의존성을 내려받을 Maven 저장소입니다.
+repositories { mavenCentral() }
+// 운영·실행·테스트에 필요한 라이브러리를 구분합니다.
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	// 운영 코드를 컴파일할 때 Lombok 애너테이션 타입을 사용합니다.
+	compileOnly 'org.projectlombok:lombok'
+	// Lombok이 getter·setter·생성자를 실제로 생성할 처리기를 연결합니다.
+	annotationProcessor 'org.projectlombok:lombok'
+	// 테스트에서도 Lombok을 사용할 수 있는 컴파일 경로입니다.
+	testCompileOnly 'org.projectlombok:lombok'
+	// 테스트 코드의 Lombok 생성 처리기를 연결합니다.
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	// MVC Controller·입력 DTO·JSON 응답 처리를 준비합니다.
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	// 엔티티와 JpaRepository의 DB 접근 기능입니다.
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// NotBlank·Size·Valid 입력 검증을 준비합니다.
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	// 현재 API를 Swagger UI로 확인할 문서 도구입니다.
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0'
+	// BCrypt 도구만 추가합니다. 이 모듈만으로 웹 API가 자동 보호되지는 않습니다.
+	implementation 'org.springframework.security:spring-security-crypto'
+	// 실행 중 MySQL에 연결할 JDBC 드라이버입니다.
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	// JUnit 등 공통 테스트 도구를 사용합니다.
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// Boot 4의 MVC 시험 지원과 AutoConfigureMockMvc를 사용합니다.
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	// JUnit Platform의 테스트 실행에 필요한 런타임입니다.
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// 자동 테스트의 전용 인메모리 DB입니다. 실제 앱 실행에는 추가하지 않습니다.
+	testRuntimeOnly 'com.h2database:h2'
+}
+// Gradle test 작업에서 JUnit Platform을 사용합니다.
+tasks.named('test') { useJUnitPlatform() }

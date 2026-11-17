@@ -1,0 +1,34 @@
+# Boot가 읽을 설정의 최상위 묶음입니다.
+spring:
+  # 실행할 앱의 식별용 설정입니다.
+  application:
+    # 앱 이름입니다. 회원 아이디·DB 이름과는 별개입니다.
+    name: kdt-security
+  # JPA가 실제로 연결할 DB 정보입니다.
+  datasource:
+    # 앞 프로젝트와 같은 로컬 MySQL 접속 옵션을 사용하고 DB 이름만 kdt-security로 맞춥니다.
+    # allowPublicKeyRetrieval=true: 인증 과정에서 서버 RSA 공개 키 조회를 허용합니다.
+    # sslMode=DISABLED: DB 연결의 TLS 암호화를 끕니다. 이 두 옵션은 로컬 실습용입니다.
+    url: "jdbc:mysql://127.0.0.1:3308/kdt-security?allowPublicKeyRetrieval=true&sslMode=DISABLED"
+    # DB 접속 계정이며 회원 loginId가 아닙니다.
+    username: root
+    # DB_PASSWORD 환경변수가 있으면 쓰고, 없으면 로컬 기본값을 씁니다.
+    password: ${DB_PASSWORD:kdtpass}
+  # 엔티티와 DB 작업에 적용할 JPA 설정입니다.
+  jpa:
+    # JPA 구현체인 Hibernate 설정입니다.
+    hibernate:
+      # none: 엔티티 필드를 바꾸어도 DB 열은 자동 생성하지 않습니다. SQL을 따로 실행합니다.
+      ddl-auto: none
+    # 실행되는 SQL을 관찰해 어떤 요청이 DB를 조회하는지 비교합니다.
+    show-sql: true
+    properties:
+      hibernate:
+        # 출력할 SQL을 여러 줄로 정리합니다.
+        format_sql: true
+        # 지원되는 콘솔에서 SQL 구문을 색상으로 구분합니다.
+        highlight_sql: true
+        # Hibernate가 붙일 수 있는 SQL 설명 주석을 표시합니다.
+        use_sql_comments: true
+    # false: 필요한 연관 값은 서비스 트랜잭션 안에서 DTO로 바꿉니다.
+    open-in-view: false
